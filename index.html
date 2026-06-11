@@ -1,872 +1,167 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Live Cash Poker Trainer</title>
-
-  <style>
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #0f172a;
-      color: #f8fafc;
-      padding: 16px;
-    }
-
-    h1, h2, h3 { margin-top: 0; }
-
-    .app {
-      max-width: 760px;
-      margin: 0 auto;
-    }
-
-    .card {
-      background: #1e293b;
-      border-radius: 18px;
-      padding: 18px;
-      margin-bottom: 16px;
-      box-shadow: 0 10px 25px rgba(0,0,0,.25);
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 5px 9px;
-      border-radius: 999px;
-      background: #334155;
-      color: #cbd5e1;
-      font-size: 12px;
-      margin-right: 6px;
-      margin-bottom: 6px;
-    }
-
-    .spot-title {
-      font-size: 22px;
-      margin-bottom: 8px;
-    }
-
-    .question {
-      font-size: 17px;
-      line-height: 1.45;
-      color: #e2e8f0;
-      white-space: pre-line;
-    }
-
-    .answers {
-      display: grid;
-      gap: 10px;
-      margin-top: 16px;
-    }
-
-    button {
-      width: 100%;
-      border: 0;
-      border-radius: 12px;
-      padding: 15px;
-      font-size: 16px;
-      font-weight: 700;
-      color: white;
-      background: #2563eb;
-    }
-
-    button.secondary {
-      background: #475569;
-    }
-
-    button.good {
-      background: #16a34a;
-    }
-
-    button.bad {
-      background: #dc2626;
-    }
-
-    button:disabled {
-      opacity: .55;
-    }
-
-    .feedback {
-      margin-top: 16px;
-      padding: 14px;
-      border-radius: 14px;
-      background: #0f172a;
-      line-height: 1.45;
-      display: none;
-    }
-
-    .feedback.show { display: block; }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .stat {
-      background: #334155;
-      border-radius: 14px;
-      padding: 12px;
-    }
-
-    .stat strong {
-      display: block;
-      font-size: 22px;
-    }
-
-    .bar {
-      height: 10px;
-      background: #334155;
-      border-radius: 999px;
-      overflow: hidden;
-      margin-top: 8px;
-    }
-
-    .bar-fill {
-      height: 100%;
-      width: 0%;
-      background: #22c55e;
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 110px;
-      border-radius: 12px;
-      border: 0;
-      padding: 12px;
-      font-size: 15px;
-      background: #e2e8f0;
-      color: #0f172a;
-    }
-
-    .small {
-      color: #cbd5e1;
-      font-size: 14px;
-      line-height: 1.4;
-    }
-
-    .hidden { display: none; }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-<div class="app">
+  <div class="app">
+    <header class="hero">
+      <h1>♠ Live Cash Poker Trainer</h1>
+      <p>Exploitative training for low-stakes live cash games and home games.</p>
+    </header>
 
-  <h1>♠ Live Cash Poker Trainer</h1>
-  <p class="small">Exploitatives Training für CHF 0.50/1 und 1/2 Home Games.</p>
+    <nav class="tabs">
+      <button class="tab active" data-screen="dashboard">Dashboard</button>
+      <button class="tab" data-screen="trainer">Trainer</button>
+      <button class="tab" data-screen="review">Hand Review</button>
+      <button class="tab" data-screen="history">History</button>
+    </nav>
 
-  <div class="card">
-    <div>
-      <span class="badge" id="categoryBadge">Preflop</span>
-      <span class="badge" id="difficultyBadge">Level</span>
-      <span class="badge" id="progressBadge">1 / 50</span>
-    </div>
+    <main>
+      <section id="dashboard" class="screen active">
+        <div class="card">
+          <h2>Your Skill Profile</h2>
+          <div class="score-main">
+            <div>
+              <span id="overallScore">0</span>
+              <small>/100</small>
+            </div>
+            <p id="coachSummary">Play some spots to build your profile.</p>
+          </div>
 
-    <h2 class="spot-title" id="spotTitle"></h2>
-    <p class="question" id="question"></p>
+          <div class="skill-grid">
+            <div class="skill"><strong id="preflopScore">0</strong><span>Preflop</span></div>
+            <div class="skill"><strong id="flopScore">0</strong><span>Flop</span></div>
+            <div class="skill"><strong id="turnScore">0</strong><span>Turn</span></div>
+            <div class="skill"><strong id="riverScore">0</strong><span>River</span></div>
+            <div class="skill"><strong id="profileScore">0</strong><span>Villain Profiling</span></div>
+            <div class="skill"><strong id="valueScore">0</strong><span>Value Betting</span></div>
+          </div>
+        </div>
 
-    <div class="answers" id="answers"></div>
+        <div class="card">
+          <h2>Main Leaks</h2>
+          <div id="leakList" class="leak-list"></div>
+        </div>
 
-    <div class="feedback" id="feedback"></div>
+        <div class="card">
+          <h2>Training Plan</h2>
+          <p id="trainingPlan" class="text-muted">Your personal plan will appear after you complete more spots.</p>
+        </div>
+      </section>
 
-    <button class="secondary hidden" id="nextBtn" onclick="nextSpot()">Nächste Situation</button>
+      <section id="trainer" class="screen">
+        <div class="card">
+          <div class="badges">
+            <span class="badge" id="spotCategory">Preflop</span>
+            <span class="badge" id="spotDifficulty">Basic</span>
+            <span class="badge" id="spotProgress">1 / 1</span>
+          </div>
+
+          <h2 id="spotTitle">Spot title</h2>
+          <p id="spotQuestion" class="spot-question"></p>
+
+          <div id="answerButtons" class="answers"></div>
+
+          <div id="spotFeedback" class="feedback"></div>
+
+          <button id="nextSpotBtn" class="secondary hidden">Next Spot</button>
+        </div>
+      </section>
+
+      <section id="review" class="screen">
+        <div class="card">
+          <h2>Hand Review</h2>
+          <p class="text-muted">Enter a real hand from your home game. The app will flag common low-stakes leaks.</p>
+
+          <div class="form-grid">
+            <label>
+              Position
+              <select id="hrPosition">
+                <option>UTG</option>
+                <option>MP</option>
+                <option>CO</option>
+                <option>Button</option>
+                <option>Small Blind</option>
+                <option>Big Blind</option>
+              </select>
+            </label>
+
+            <label>
+              Villain Type
+              <select id="hrVillain">
+                <option>Calling Station</option>
+                <option>Nit</option>
+                <option>Maniac</option>
+                <option>Loose Passive</option>
+                <option>TAG Regular</option>
+                <option>Unknown Recreational</option>
+              </select>
+            </label>
+
+            <label>
+              Effective Stack
+              <input id="hrStack" placeholder="e.g. 220 CHF" />
+            </label>
+
+            <label>
+              Hole Cards
+              <input id="hrCards" placeholder="e.g. As Ks" />
+            </label>
+          </div>
+
+          <label>
+            Preflop Action
+            <textarea id="hrPreflop" placeholder="e.g. MP limps, CO calls, Hero raises Button to 16, both call"></textarea>
+          </label>
+
+          <label>
+            Flop
+            <textarea id="hrFlop" placeholder="Board and action"></textarea>
+          </label>
+
+          <label>
+            Turn
+            <textarea id="hrTurn" placeholder="Turn card and action"></textarea>
+          </label>
+
+          <label>
+            River
+            <textarea id="hrRiver" placeholder="River card and action"></textarea>
+          </label>
+
+          <label>
+            Your Thoughts / Result
+            <textarea id="hrNotes" placeholder="What were you unsure about? What happened at showdown?"></textarea>
+          </label>
+
+          <button id="analyzeHandBtn">Analyze Hand</button>
+
+          <div id="handAnalysis" class="feedback"></div>
+        </div>
+      </section>
+
+      <section id="history" class="screen">
+        <div class="card">
+          <h2>Reviewed Hands</h2>
+          <div id="handHistory"></div>
+          <button id="clearHistoryBtn" class="danger">Clear Hand History</button>
+        </div>
+
+        <div class="card">
+          <h2>Reset App</h2>
+          <button id="resetAllBtn" class="danger">Reset All Training Data</button>
+        </div>
+      </section>
+    </main>
   </div>
 
-  <div class="card">
-    <h3>Dein Leak-Profil</h3>
-
-    <div class="stats-grid">
-      <div class="stat"><strong id="score">0</strong>Richtige Entscheidungen</div>
-      <div class="stat"><strong id="accuracy">0%</strong>Trefferquote</div>
-      <div class="stat"><strong id="played">0</strong>Gespielte Spots</div>
-      <div class="stat"><strong id="mainLeak">–</strong>Haupt-Leak</div>
-    </div>
-
-    <div class="bar"><div class="bar-fill" id="barFill"></div></div>
-
-    <p class="small" id="leakText">Nach einigen Spots erkennt die App deine häufigsten Fehler.</p>
-  </div>
-
-  <div class="card">
-    <h3>Handnotizen</h3>
-    <textarea id="notes" placeholder="Eigene Hände oder Gedanken nach der Session notieren..."></textarea>
-    <button class="secondary" onclick="saveNotes()">Notizen speichern</button>
-    <p class="small" id="saveMsg"></p>
-  </div>
-
-  <div class="card">
-    <button class="bad" onclick="resetTraining()">Training zurücksetzen</button>
-  </div>
-
-</div>
-
-<script>
-const spots = [
-  {
-    title: "AJs am Button gegen Limper",
-    category: "Preflop",
-    difficulty: "Basic",
-    question: "CHF 1/2 Home Game, 8-handed.\nMP limpt, CO limpt. Du sitzt am Button mit A♠ J♠. Beide Blinds sind eher loose-passiv.\nWas ist die beste Entscheidung?",
-    answers: ["Fold", "Call", "Raise auf 8 CHF", "Raise auf 16–20 CHF"],
-    best: 3,
-    leak: "zu passiv",
-    explanation: "Raise gross ist am besten. In loose-passiven Home Games willst du mit AJs in Position Value holen und schwächere Ax/Jx/suited Hände isolieren. Ein Call verschenkt Value."
-  },
-  {
-    title: "KTo UTG",
-    category: "Preflop",
-    difficulty: "Basic",
-    question: "8-handed Home Game.\nDu bist UTG mit K♦ T♣. Hinter dir sitzen mehrere Spieler, die gerne callen.\nWas machst du?",
-    answers: ["Fold", "Call", "Raise klein", "Raise gross"],
-    best: 0,
-    leak: "zu loose early position",
-    explanation: "Fold ist korrekt. KTo spielt sich UTG schlecht, ist oft dominiert und macht in Multiway-Pots teure Second-Best-Hände."
-  },
-  {
-    title: "99 im Cutoff",
-    category: "Preflop",
-    difficulty: "Basic",
-    question: "Alle folden zu dir im Cutoff. Du hältst 9♣ 9♦. Button ist tight, Blinds sind passiv.\nWas ist am besten?",
-    answers: ["Fold", "Call", "Open Raise", "All-in"],
-    best: 2,
-    leak: "zu passiv",
-    explanation: "Open Raise ist klar. 99 ist im Cutoff stark, du kannst Blinds einsammeln oder gegen schlechtere Hände Value bekommen."
-  },
-  {
-    title: "AQo gegen Nit-3-Bet",
-    category: "Preflop",
-    difficulty: "Medium",
-    question: "Du open-raist MP mit A♦ Q♣. Ein sehr tighter Spieler am Button 3-bettet gross. Er hat bisher kaum Hände gespielt.\nWas ist meist am besten?",
-    answers: ["Fold", "Call", "4-Bet Bluff", "All-in"],
-    best: 0,
-    leak: "zu viele Hero Calls",
-    explanation: "Gegen einen echten Nit ist AQo oft dominiert. Small Stakes Live-Spieler 3-betten hier häufig QQ+, AK. Fold spart Geld."
-  },
-  {
-    title: "KK gegen Calling Station",
-    category: "Flop",
-    difficulty: "Basic",
-    question: "Du hast K♠ K♥. Flop: K♦ 8♣ 4♠. Heads-up gegen eine Calling Station. Pot 40 CHF.\nVillain checkt zu dir.",
-    answers: ["Check behind", "Bet 10 CHF", "Bet 25–35 CHF", "All-in"],
-    best: 2,
-    leak: "zu wenig Value Bets",
-    explanation: "Du solltest für Value betten. Calling Stations callen mit Kx, 8x, Paaren und Backdoors zu viel. Slowplay kostet oft Value."
-  },
-  {
-    title: "Flushdraw ohne Odds",
-    category: "Turn",
-    difficulty: "Medium",
-    question: "Du hast A♠ 7♠. Board: K♠ 9♠ 4♦ 2♣. Pot 60 CHF. Gegner bettet 60 CHF.\nEr ist passiv und blufft selten.",
-    answers: ["Fold", "Call", "Raise klein", "All-in"],
-    best: 0,
-    leak: "Draws zu teuer callen",
-    explanation: "Fold ist meist korrekt. Du bekommst schlechte direkte Odds, und gegen passive Spieler gibt es oft wenig Fold Equity."
-  },
-  {
-    title: "River Hero Call",
-    category: "River",
-    difficulty: "Medium",
-    question: "Board: A♣ 9♦ 6♠ 3♥ 2♣. Du hast A♥ T♥. Pot 80 CHF. Ein passiver Spieler bettet am River plötzlich 75 CHF.\nWas ist am besten?",
-    answers: ["Fold", "Call", "Raise klein", "All-in"],
-    best: 0,
-    leak: "zu viele Hero Calls",
-    explanation: "Gegen passive Spieler sind grosse Riverbets oft stark. Top Pair mittelmässiger Kicker ist hier häufig geschlagen."
-  },
-  {
-    title: "Value mit Top Pair",
-    category: "River",
-    difficulty: "Basic",
-    question: "Du hast A♠ Q♣. Board: Q♦ 8♠ 5♣ 3♥ 2♠. Gegner ist eine Calling Station. Pot 70 CHF. Er checkt.\nWas machst du?",
-    answers: ["Check behind", "Bet 20 CHF", "Bet 45–60 CHF", "All-in"],
-    best: 2,
-    leak: "zu wenig Value Bets",
-    explanation: "Klare Value Bet. Calling Stations zahlen mit schlechterer Q, 8x und Pocket Pairs. Nicht checken aus Angst vor seltenen Two Pair."
-  },
-  {
-    title: "Bluff gegen Calling Station",
-    category: "River",
-    difficulty: "Basic",
-    question: "Du hast verpassten Flushdraw. Board: K♦ 8♦ 4♣ 2♠ J♣. Gegner ist bekannt dafür, fast jedes Paar zu callen.\nEr checkt zu dir. Pot 50 CHF.",
-    answers: ["Check behind", "Bluff 20 CHF", "Bluff 50 CHF", "All-in"],
-    best: 0,
-    leak: "schlechte Bluffs",
-    explanation: "Nicht bluffen. Gegen Calling Stations ist der beste Exploit: weniger bluffen, mehr valuebetten."
-  },
-  {
-    title: "Set Mining OOP",
-    category: "Preflop",
-    difficulty: "Medium",
-    question: "CHF 1/2. UTG, ein tighter Spieler, raist auf 12 CHF. Du sitzt im Small Blind mit 4♣4♦. Effektive Stacks nur 80 CHF.\nWas ist am besten?",
-    answers: ["Fold", "Call", "3-Bet", "All-in"],
-    best: 0,
-    leak: "schlechte Implied Odds",
-    explanation: "Fold. Für Set Mining brauchst du tiefe implied odds. Mit nur 80 CHF effektiv und ausser Position ist der Call unprofitabel."
-  },
-  {
-    title: "Iso-Raise mit KQs",
-    category: "Preflop",
-    difficulty: "Basic",
-    question: "Zwei loose Spieler limpen. Du bist am Button mit K♠ Q♠. Blinds callen oft.\nWas ist am besten?",
-    answers: ["Fold", "Call", "Raise auf 6 CHF", "Raise auf 14–18 CHF"],
-    best: 3,
-    leak: "zu passiv",
-    explanation: "Gross isolieren. KQs spielt gut in Position und dominiert viele Limping-Hände."
-  },
-  {
-    title: "A5s im Small Blind",
-    category: "Preflop",
-    difficulty: "Medium",
-    question: "CO open-raist auf 8 CHF, Button callt. Du sitzt im Small Blind mit A♠5♠. Big Blind ist loose.\nWas ist meist am besten?",
-    answers: ["Fold", "Call", "3-Bet klein", "All-in"],
-    best: 0,
-    leak: "zu loose OOP",
-    explanation: "Fold ist solide. Aus dem Small Blind ohne Position wird A5s oft überschätzt, besonders wenn mehrere Spieler involviert sind."
-  },
-  {
-    title: "Overpair auf nassem Board",
-    category: "Flop",
-    difficulty: "Medium",
-    question: "Du hast A♣A♥. Flop: J♠ T♠ 8♦. Drei Gegner sehen den Flop. Pot 60 CHF. Du bist first to act.\nWas ist am besten?",
-    answers: ["Check", "Bet 20 CHF", "Bet 45–60 CHF", "All-in"],
-    best: 2,
-    leak: "zu klein betten",
-    explanation: "Gross betten für Value und Protection. Viele Draws und schlechtere Made Hands callen. Kleine Bets geben zu gute Odds."
-  },
-  {
-    title: "Top Pair Multiway",
-    category: "Flop",
-    difficulty: "Medium",
-    question: "Du hast K♣Q♣. Flop: Q♦ 9♦ 7♠. Vier Spieler im Pot. Ein passiver Spieler donkt Pot.\nWas ist meist am besten?",
-    answers: ["Fold", "Call", "Raise klein", "All-in"],
-    best: 1,
-    leak: "Overplay Top Pair",
-    explanation: "Call ist meist besser als Raise. Multiway gegen Pot-Donk ist Top Pair gut, aber nicht stark genug zum Aufblasen."
-  },
-  {
-    title: "Nut Flush Draw aggressiv?",
-    category: "Flop",
-    difficulty: "Medium",
-    question: "Du hast A♦J♦ am Button. Flop: K♦ 8♦ 3♣. Heads-up gegen einen Spieler, der oft foldet. Pot 35 CHF. Er bettet 15 CHF.",
-    answers: ["Fold", "Call", "Raise auf 50 CHF", "All-in"],
-    best: 2,
-    leak: "zu passiv mit Equity",
-    explanation: "Raise ist gut: Du hast Nut-Flushdraw, Backdoor-Straight und Fold Equity gegen einen Spieler, der zu viel foldet."
-  },
-  {
-    title: "Second Pair gegen Maniac",
-    category: "Flop",
-    difficulty: "Medium",
-    question: "Du hast A♣8♣. Flop: K♦8♥4♠. Maniac bettet fast jeden Flop. Pot 40 CHF, er bettet 25 CHF.",
-    answers: ["Fold", "Call", "Raise klein", "All-in"],
-    best: 1,
-    leak: "zu ängstlich gegen Maniac",
-    explanation: "Call ist okay. Gegen Maniacs musst du mehr bluff-catchen, aber nicht direkt überdrehen."
-  },
-  {
-    title: "Turn zweite Barrel",
-    category: "Turn",
-    difficulty: "Medium",
-    question: "Du hast A♠K♠. Du hast preflop geraist, Flop Q♠7♣2♠ gebettet, Villain callt. Turn: 4♦. Pot 80 CHF. Villain checkt.\nWas ist am besten gegen Calling Station?",
-    answers: ["Check behind", "Bet 25 CHF", "Bet 70 CHF", "All-in"],
-    best: 0,
-    leak: "zu viel bluffen",
-    explanation: "Gegen Calling Stations solltest du mit Ace-high Draw oft behind checken und deine Equity realisieren. Sie folden zu wenig."
-  },
-  {
-    title: "Turn Value mit Two Pair",
-    category: "Turn",
-    difficulty: "Basic",
-    question: "Du hast Q♣J♣. Board: Q♦J♠5♥2♣. Gegner checkt. Pot 55 CHF. Gegner callt zu viel.\nWas machst du?",
-    answers: ["Check", "Bet 15 CHF", "Bet 40–55 CHF", "All-in"],
-    best: 2,
-    leak: "zu wenig Value Bets",
-    explanation: "Gross valuebetten. Viele Qx, Jx und Draws zahlen."
-  },
-  {
-    title: "River dünne Value Bet",
-    category: "River",
-    difficulty: "Hard",
-    question: "Du hast K♠Q♥. Board: Q♣8♦5♠3♣2♥. Gegner ist loose-passiv und checkt dreimal. Pot 65 CHF.\nWas ist am besten?",
-    answers: ["Check behind", "Bet 20 CHF", "Bet 45 CHF", "All-in"],
-    best: 2,
-    leak: "zu wenig Thin Value",
-    explanation: "Bet 45 CHF ist gut. Du wirst oft von schlechterer Q, 8x oder Pocket Pairs bezahlt."
-  },
-  {
-    title: "River Raise von Nit",
-    category: "River",
-    difficulty: "Hard",
-    question: "Du hast A♠A♦. Board: A♣9♠6♥4♦3♣. Du bettest River gross, ein sehr tighter Spieler raist all-in.\nWas ist meist korrekt?",
-    answers: ["Snap Call", "Tank Call", "Fold", "Re-Raise"],
-    best: 2,
-    leak: "zu viele Hero Calls",
-    explanation: "Sehr schwer, aber gegen einen echten Nit ist River-Raise all-in fast immer die Nuts. Sets werden selten so geraist; Straights sind plausibel."
-  },
-  {
-    title: "Suited Connector UTG",
-    category: "Preflop",
-    difficulty: "Medium",
-    question: "8-handed. Du bist UTG mit 7♠6♠. Tisch ist loose-passiv, viele Calls preflop.\nWas ist am besten?",
-    answers: ["Fold", "Limp", "Raise klein", "Raise gross"],
-    best: 0,
-    leak: "zu loose early position",
-    explanation: "Fold. Suited Connectors sehen hübsch aus, sind UTG in loose Games aber oft Reverse-Implied-Odds-Fallen."
-  },
-  {
-    title: "Button Steal mit Q9s",
-    category: "Preflop",
-    difficulty: "Basic",
-    question: "Alle folden zu dir am Button. Blinds sind tight und folden oft. Du hast Q♠9♠.\nWas ist am besten?",
-    answers: ["Fold", "Call", "Open Raise", "All-in"],
-    best: 2,
-    leak: "Position unterschätzt",
-    explanation: "Open Raise. Position plus tighte Blinds machen Q9s profitabel."
-  },
-  {
-    title: "Limp behind mit kleinem Paar?",
-    category: "Preflop",
-    difficulty: "Basic",
-    question: "Vier Spieler limpen. Du bist am Button mit 5♣5♥. Stacks sind alle 200+ CHF.\nWas ist am besten?",
-    answers: ["Fold", "Call", "Raise gross", "All-in"],
-    best: 1,
-    leak: "kleine Paare overplayen",
-    explanation: "Call ist okay. Multiway mit tiefen Stacks kannst du günstig auf Set Value spielen."
-  },
-  {
-    title: "AK verfehlt Flop multiway",
-    category: "Flop",
-    difficulty: "Medium",
-    question: "Du hast A♠K♦ geraist, drei Caller. Flop: 9♣7♣5♥. Pot 50 CHF. Du bist out of position.\nWas ist am besten?",
-    answers: ["Check", "Bet 20 CHF", "Bet 50 CHF", "All-in"],
-    best: 0,
-    leak: "zu viel C-Bet multiway",
-    explanation: "Check. Multiway auf drawlastigem Board ohne Treffer hast du wenig Fold Equity."
-  },
-  {
-    title: "C-Bet trockenes Board",
-    category: "Flop",
-    difficulty: "Basic",
-    question: "Du raist Button mit A♣K♣, Big Blind callt. Flop: Q♦7♠2♥. BB checkt. Gegner foldet oft auf C-Bets.\nWas machst du?",
-    answers: ["Check behind", "Bet klein", "Bet Pot", "All-in"],
-    best: 1,
-    leak: "zu passiv mit Initiative",
-    explanation: "Kleine C-Bet ist gut. Trockenes Board, Range-Vorteil und Fold Equity."
-  },
-  {
-    title: "Donk Bet gross auf paired Board",
-    category: "Flop",
-    difficulty: "Medium",
-    question: "Du hast A♦Q♦. Flop: Q♠8♣8♥. Ein passiver Spieler donkt Pot in dich.\nWas ist meist am besten?",
-    answers: ["Fold", "Call", "Raise gross", "All-in"],
-    best: 1,
-    leak: "Overplay Top Pair",
-    explanation: "Call. Du schlägst viele Qx, aber ein Raise isoliert dich oft gegen 8x oder starke Hände."
-  },
-  {
-    title: "Turn scare card",
-    category: "Turn",
-    difficulty: "Medium",
-    question: "Du hast K♣K♦. Board: J♠7♥4♣A♦. Du hast Flop gebettet, Villain callt. Turn kommt Ass. Villain checkt.\nWas ist oft am besten gegen passiven Caller?",
-    answers: ["Check behind", "Bet gross", "Overbet", "All-in"],
-    best: 0,
-    leak: "Overplay Overpair",
-    explanation: "Check behind ist sinnvoll. Das Ass trifft viele Calling-Ranges, und du bekommst selten drei Strassen Value von schlechterem."
-  },
-  {
-    title: "Turn Protection mit TPTK",
-    category: "Turn",
-    difficulty: "Basic",
-    question: "Du hast A♠Q♠. Board: Q♥T♥5♣3♦. Gegner ist loose und drawlastig unterwegs. Pot 70 CHF, er checkt.\nWas machst du?",
-    answers: ["Check", "Bet 20 CHF", "Bet 55–70 CHF", "All-in"],
-    best: 2,
-    leak: "zu klein betten",
-    explanation: "Gross betten. Viele Draws und schlechtere Qx zahlen. Kleine Bets geben zu gute Odds."
-  },
-  {
-    title: "River verpasster Draw callen?",
-    category: "River",
-    difficulty: "Basic",
-    question: "Du hast 9♠8♠. Board: A♠K♠4♦2♣7♥. Du hast nichts getroffen. Gegner bettet 30 CHF in 70 CHF.\nWas ist korrekt?",
-    answers: ["Fold", "Call", "Raise Bluff", "All-in"],
-    best: 0,
-    leak: "zu loose River Calls",
-    explanation: "Fold. Kein Showdown Value, keine Odds zum Ziehen, keine Pflicht zu hero-callen."
-  },
-  {
-    title: "River Block Bet?",
-    category: "River",
-    difficulty: "Hard",
-    question: "Du hast J♦J♣. Board: T♠7♠4♥2♦2♣. Loose-passiver Gegner callte Flop und Turn. Pot 90 CHF. Du bist first to act.\nWas ist gut?",
-    answers: ["Check", "Bet 25 CHF", "Bet 70 CHF", "All-in"],
-    best: 1,
-    leak: "zu wenig Thin Value",
-    explanation: "Kleine Value/Block-Bet ist gut. Schlechtere Tens und kleine Paare können zahlen, und du bestimmst den Preis."
-  },
-  {
-    title: "Top Set slowplay?",
-    category: "Flop",
-    difficulty: "Basic",
-    question: "Du hast Q♠Q♦. Flop: Q♥J♥9♣. Drei Gegner im Pot. Pot 80 CHF.\nWas ist am besten?",
-    answers: ["Check slowplay", "Bet 20 CHF", "Bet 70–90 CHF", "All-in"],
-    best: 2,
-    leak: "Slowplay auf nassen Boards",
-    explanation: "Gross betten. Das Board ist extrem drawlastig. Du willst Value und Protection."
-  },
-  {
-    title: "Maniac raist Flop",
-    category: "Flop",
-    difficulty: "Hard",
-    question: "Du hast A♠A♣. Flop: T♦7♣3♠. Du bettest 25 in 40, Maniac raist auf 90. Effektiv 300 CHF.\nWas ist meist gut?",
-    answers: ["Fold", "Call", "Reraise/Stack-off", "Minraise"],
-    best: 2,
-    leak: "zu ängstlich gegen Maniac",
-    explanation: "Gegen echte Maniacs ist Overpair stark genug zum Weiterspielen. Viele Tx, Draws und Bluffs sind in seiner Range."
-  },
-  {
-    title: "Nit raist Flop",
-    category: "Flop",
-    difficulty: "Hard",
-    question: "Du hast A♠A♣. Flop: T♦7♣3♠. Du bettest, ein sehr tighter Spieler raist gross. Effektiv tief genug für Stack-off.\nWas ist meist besser?",
-    answers: ["Fold", "Call vorsichtig", "All-in", "Minraise"],
-    best: 1,
-    leak: "Gegnerprofil ignorieren",
-    explanation: "Gegen Nit nicht automatisch stacken. Call und Turn neu bewerten ist besser als blind broke gehen."
-  },
-  {
-    title: "Gutshot teuer?",
-    category: "Turn",
-    difficulty: "Basic",
-    question: "Du hast K♣J♣. Board: A♦Q♠7♥2♣. Du hast nur Gutshot. Pot 60 CHF. Gegner bettet 50 CHF.\nWas ist korrekt?",
-    answers: ["Fold", "Call", "Raise Bluff", "All-in"],
-    best: 0,
-    leak: "Draws zu teuer callen",
-    explanation: "Fold. Nur vier Outs und schlechte Odds. In Home Games wird zu viel mit schwachen Draws gecallt."
-  },
-  {
-    title: "Open Limp mit AA?",
-    category: "Preflop",
-    difficulty: "Basic",
-    question: "Du bist UTG mit A♠A♥. Tisch ist loose, viele Spieler limpen und callen Raises.\nWas ist am besten?",
-    answers: ["Limp trap", "Raise normal/gross", "Fold", "Minraise"],
-    best: 1,
-    leak: "Fancy Play Syndrome",
-    explanation: "Raise. In Small Stakes bekommst du Value direkt. Limp-Traps funktionieren selten besser und bauen zu kleine Pots."
-  },
-  {
-    title: "3-Bet Value gegen loose Open",
-    category: "Preflop",
-    difficulty: "Medium",
-    question: "Loose Spieler raist CO auf 8 CHF. Du bist Button mit A♣Q♣. Blinds sind passiv.\nWas ist am besten?",
-    answers: ["Fold", "Call", "3-Bet auf 28–32 CHF", "All-in"],
-    best: 2,
-    leak: "zu passiv",
-    explanation: "3-Bet for Value. Gegen loose Opens bist du klar vorne und willst Position nutzen."
-  },
-  {
-    title: "Cold Call mit AJo",
-    category: "Preflop",
-    difficulty: "Medium",
-    question: "UTG tight raist, MP callt. Du bist CO mit A♣J♦.\nWas ist meist am besten?",
-    answers: ["Fold", "Call", "3-Bet Bluff", "All-in"],
-    best: 0,
-    leak: "dominierte Hände callen",
-    explanation: "Fold. AJo ist gegen UTG tight oft dominiert, und der Caller verbessert deine Situation nicht."
-  },
-  {
-    title: "BB Defense zu loose?",
-    category: "Preflop",
-    difficulty: "Basic",
-    question: "Button tight raist auf 8 CHF. Du bist Big Blind mit J♣4♣.\nWas machst du?",
-    answers: ["Fold", "Call", "3-Bet", "All-in"],
-    best: 0,
-    leak: "Blinds zu loose verteidigen",
-    explanation: "Fold. Suited allein reicht nicht. J4s spielt schlecht und macht viele schwache Paare."
-  },
-  {
-    title: "Check-Raise Bluff gegen Station",
-    category: "Flop",
-    difficulty: "Medium",
-    question: "Du hast 6♠5♠. Flop: K♦9♣2♥. Du hast nichts. Gegner ist Calling Station und bettet klein.\nWas ist am besten?",
-    answers: ["Fold", "Call", "Check-Raise Bluff", "All-in Bluff"],
-    best: 0,
-    leak: "schlechte Bluffs",
-    explanation: "Fold. Bluffe keine Spieler, die nicht folden."
-  },
-  {
-    title: "Value gegen schwachen Donk",
-    category: "Flop",
-    difficulty: "Medium",
-    question: "Du hast K♠K♦. Flop: J♣7♦2♠. Loose Spieler donkt 10 CHF in 60 CHF.\nWas machst du?",
-    answers: ["Fold", "Call", "Raise auf 45–60 CHF", "All-in"],
-    best: 2,
-    leak: "zu passiv",
-    explanation: "Raise for Value. Kleine Donkbets sind oft schwache Made Hands oder Draws."
-  },
-  {
-    title: "River Bluffcatch gegen Maniac",
-    category: "River",
-    difficulty: "Hard",
-    question: "Du hast Q♠Q♦. Board: K♣8♥4♠2♦2♣. Maniac feuert River 100 CHF in 120 CHF. Er blufft oft.\nWas ist am besten?",
-    answers: ["Fold", "Call", "Raise", "All-in"],
-    best: 1,
-    leak: "zu ängstlich gegen Maniac",
-    explanation: "Call kann gut sein. Gegen Maniacs musst du mit starken Bluffcatchern öfter bezahlen."
-  },
-  {
-    title: "River Bluffcatch gegen Nit",
-    category: "River",
-    difficulty: "Hard",
-    question: "Du hast Q♠Q♦. Board: K♣8♥4♠2♦2♣. Sehr tighter Spieler bettet River 100 CHF in 120 CHF.\nWas ist am besten?",
-    answers: ["Fold", "Call", "Raise", "All-in"],
-    best: 0,
-    leak: "Gegnerprofil ignorieren",
-    explanation: "Fold. Gleiche Hand, anderes Gegnerprofil. Gegen Nits ist diese Bet selten Bluff."
-  }
-];
-  let current = 0;
-
-let stats = JSON.parse(localStorage.getItem("pokerTrainerStats")) || {
-  correct: 0,
-  played: 0,
-  leaks: {}
-};
-
-function renderSpot() {
-
-  if (current >= spots.length) {
-
-    document.getElementById("spotTitle").innerText =
-      "Training abgeschlossen";
-
-    document.getElementById("question").innerText =
-      "Sehr gut. Du hast alle verfügbaren Situationen gespielt.";
-
-    document.getElementById("answers").innerHTML = "";
-
-    document.getElementById("feedback").classList.add("show");
-    document.getElementById("feedback").innerHTML =
-      "🎉 Training beendet. Weitere Spots können später ergänzt werden.";
-
-    document.getElementById("nextBtn").classList.add("hidden");
-
-    updateDashboard();
-
-    return;
-  }
-
-  const spot = spots[current];
-
-  document.getElementById("spotTitle").innerText = spot.title;
-  document.getElementById("question").innerText = spot.question;
-
-  document.getElementById("categoryBadge").innerText =
-    spot.category;
-
-  document.getElementById("difficultyBadge").innerText =
-    spot.difficulty;
-
-  document.getElementById("progressBadge").innerText =
-    `${current + 1} / ${spots.length}`;
-
-  const answersDiv =
-    document.getElementById("answers");
-
-  answersDiv.innerHTML = "";
-
-  spot.answers.forEach((answer, index) => {
-
-    const btn = document.createElement("button");
-
-    btn.innerText = answer;
-
-    btn.onclick = () => evaluateAnswer(index);
-
-    answersDiv.appendChild(btn);
-
-  });
-
-  document.getElementById("feedback").classList.remove("show");
-
-  document.getElementById("nextBtn").classList.add("hidden");
-}
-
-function evaluateAnswer(choice) {
-
-  const spot = spots[current];
-
-  stats.played++;
-
-  if (choice === spot.best) {
-
-    stats.correct++;
-
-  } else {
-
-    if (!stats.leaks[spot.leak]) {
-      stats.leaks[spot.leak] = 0;
-    }
-
-    stats.leaks[spot.leak]++;
-  }
-
-  localStorage.setItem(
-    "pokerTrainerStats",
-    JSON.stringify(stats)
-  );
-
-  const feedback =
-    document.getElementById("feedback");
-
-  const correct =
-    choice === spot.best;
-
-  feedback.classList.add("show");
-
-  feedback.innerHTML =
-    (correct ? "✅ <strong>Richtig</strong><br><br>" :
-    "❌ <strong>Nicht optimal</strong><br><br>") +
-    spot.explanation;
-
-  document
-    .querySelectorAll("#answers button")
-    .forEach(btn => btn.disabled = true);
-
-  document
-    .getElementById("nextBtn")
-    .classList.remove("hidden");
-
-  updateDashboard();
-}
-
-function nextSpot() {
-
-  current++;
-
-  renderSpot();
-}
-
-function updateDashboard() {
-
-  document.getElementById("score").innerText =
-    stats.correct;
-
-  document.getElementById("played").innerText =
-    stats.played;
-
-  const accuracy =
-    stats.played === 0
-      ? 0
-      : Math.round(
-          (stats.correct / stats.played) * 100
-        );
-
-  document.getElementById("accuracy").innerText =
-    accuracy + "%";
-
-  document.getElementById("barFill").style.width =
-    accuracy + "%";
-
-  let leakName = "Kein Leak erkannt";
-
-  let maxCount = 0;
-
-  Object.keys(stats.leaks).forEach(key => {
-
-    if (stats.leaks[key] > maxCount) {
-
-      maxCount = stats.leaks[key];
-      leakName = key;
-    }
-
-  });
-
-  document.getElementById("mainLeak").innerText =
-    leakName;
-
-  let recommendation = "";
-
-  switch (leakName) {
-
-    case "zu passiv":
-      recommendation =
-        "Du verpasst häufig Value. Trainiere Iso-Raises und aggressiveres Value Betting.";
-      break;
-
-    case "zu viele Hero Calls":
-      recommendation =
-        "Fokussiere dich stärker auf Gegnerprofile. Passive Spieler bluffen selten.";
-      break;
-
-    case "zu wenig Value Bets":
-      recommendation =
-        "Du lässt Geld liegen. Gegen Calling Stations dünner valuebetten.";
-      break;
-
-    case "schlechte Bluffs":
-      recommendation =
-        "Bluffe weniger gegen Spieler, die nicht folden.";
-      break;
-
-    case "Draws zu teuer callen":
-      recommendation =
-        "Verbessere Pot Odds und Implied Odds Verständnis.";
-      break;
-
-    case "zu loose early position":
-      recommendation =
-        "Spiele UTG und MP deutlich tighter.";
-      break;
-
-    case "Position unterschätzt":
-      recommendation =
-        "Nutze Button und Cutoff aggressiver.";
-      break;
-
-    default:
-      recommendation =
-        "Spiele weitere Spots für ein genaueres Leak-Profil.";
-  }
-
-  document.getElementById("leakText").innerText =
-    recommendation;
-}
-
-function saveNotes() {
-
-  localStorage.setItem(
-    "pokerTrainerNotes",
-    document.getElementById("notes").value
-  );
-
-  document.getElementById("saveMsg").innerText =
-    "✅ Notizen gespeichert";
-}
-
-function loadNotes() {
-
-  const notes =
-    localStorage.getItem("pokerTrainerNotes");
-
-  if (notes) {
-    document.getElementById("notes").value = notes;
-  }
-}
-
-function resetTraining() {
-
-  if (!confirm("Wirklich zurücksetzen?")) return;
-
-  localStorage.removeItem("pokerTrainerStats");
-  localStorage.removeItem("pokerTrainerNotes");
-
-  location.reload();
-}
-
-loadNotes();
-updateDashboard();
-renderSpot();
-
-</script>
+  <script src="spots.js"></script>
+  <script src="coach.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
