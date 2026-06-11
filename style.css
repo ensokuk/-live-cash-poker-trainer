@@ -1,1 +1,288 @@
+* {
+  box-sizing: border-box;
+}
 
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --card-soft: #334155;
+  --text: #f8fafc;
+  --muted: #cbd5e1;
+  --blue: #2563eb;
+  --green: #16a34a;
+  --red: #dc2626;
+  --yellow: #f59e0b;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  padding: 16px;
+}
+
+.app {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.hero {
+  margin-bottom: 16px;
+}
+
+.hero h1 {
+  margin: 0 0 6px;
+  font-size: 30px;
+}
+
+.hero p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.tab {
+  background: var(--card-soft);
+  color: var(--text);
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tab.active {
+  background: var(--blue);
+}
+
+.screen {
+  display: none;
+}
+
+.screen.active {
+  display: block;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.25);
+}
+
+h2, h3 {
+  margin-top: 0;
+}
+
+.text-muted {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.score-main {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 16px;
+  align-items: center;
+}
+
+.score-main span {
+  font-size: 54px;
+  font-weight: 800;
+}
+
+.score-main small {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.skill-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.skill {
+  background: var(--card-soft);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.skill strong {
+  display: block;
+  font-size: 28px;
+}
+
+.skill span {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.leak-list {
+  display: grid;
+  gap: 10px;
+}
+
+.leak-item {
+  background: var(--card-soft);
+  border-radius: 14px;
+  padding: 12px;
+}
+
+.leak-item strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.badges {
+  margin-bottom: 12px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: var(--card-soft);
+  color: var(--muted);
+  font-size: 12px;
+  margin-right: 6px;
+  margin-bottom: 6px;
+}
+
+.spot-question {
+  font-size: 17px;
+  line-height: 1.5;
+  white-space: pre-line;
+  color: #e2e8f0;
+}
+
+.answers {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+button {
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: 800;
+  color: white;
+  background: var(--blue);
+  cursor: pointer;
+}
+
+button.secondary {
+  background: #475569;
+  margin-top: 12px;
+}
+
+button.danger {
+  background: var(--red);
+  margin-top: 12px;
+}
+
+button.good {
+  background: var(--green);
+}
+
+button.bad {
+  background: var(--red);
+}
+
+button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.feedback {
+  display: none;
+  margin-top: 16px;
+  padding: 14px;
+  border-radius: 14px;
+  background: #020617;
+  line-height: 1.5;
+}
+
+.feedback.show {
+  display: block;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+label {
+  display: block;
+  margin-top: 12px;
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  margin-top: 6px;
+  border: 0;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 15px;
+  background: #e2e8f0;
+  color: #0f172a;
+  font-family: inherit;
+}
+
+textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.history-item {
+  background: var(--card-soft);
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.history-item strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  body {
+    padding: 12px;
+  }
+
+  .tabs {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .score-main {
+    grid-template-columns: 1fr;
+  }
+
+  .skill-grid,
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
