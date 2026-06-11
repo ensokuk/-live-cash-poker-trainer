@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Cash Poker Trainer</title>
+
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0f172a;
+      color: white;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .card {
+      background: #1e293b;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      background: #2563eb;
+      color: white;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    #feedback {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    .stats {
+      margin-top: 20px;
+      padding: 15px;
+      background: #334155;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>♠ Live Cash Poker Trainer</h1>
+
+  <div class="card">
+    <h3 id="title">Situation</h3>
+
+    <p id="question"></p>
+
+    <button onclick="answer('fold')">Fold</button>
+    <button onclick="answer('call')">Call</button>
+    <button onclick="answer('raiseSmall')">Raise klein</button>
+    <button onclick="answer('raiseBig')">Raise gross</button>
+
+    <div id="feedback"></div>
+  </div>
+
+  <div class="stats">
+    <h3>Leak Tracker</h3>
+
+    <p>Richtige Entscheidungen: <span id="correct">0</span></p>
+    <p>Zu passiv: <span id="passive">0</span></p>
+    <p>Zu aggressiv: <span id="aggressive">0</span></p>
+  </div>
+
+<script>
+
+const spots = [
+
+{
+title:"Button mit AJs",
+question:"CHF 1/2 Home Game. Zwei Limper vor dir. Du sitzt am Button mit A♠J♠.",
+best:"raiseBig",
+explanation:"Isolieren und Value holen. Gegen Limper gross raisen."
+},
+
+{
+title:"UTG mit KTo",
+question:"8-handed. Du bist UTG mit K♦T♣.",
+best:"fold",
+explanation:"Zu schwach für Early Position."
+},
+
+{
+title:"CO mit 99",
+question:"Alle folden zu dir im CO. Du hältst 9♣9♦.",
+best:"raiseSmall",
+explanation:"Standard Open Raise."
+}
+
+];
+
+let current = 0;
+
+let correct = 0;
+let passive = 0;
+let aggressive = 0;
+
+function loadSpot(){
+
+document.getElementById("title").innerText =
+spots[current].title;
+
+document.getElementById("question").innerText =
+spots[current].question;
+
+document.getElementById("feedback").innerHTML = "";
+
+}
+
+function answer(choice){
+
+const spot = spots[current];
+
+if(choice === spot.best){
+
+correct++;
+
+document.getElementById("feedback").innerHTML =
+"✅ Richtig<br><br>" + spot.explanation;
+
+}else{
+
+if(
+(choice==="call" && spot.best.includes("raise"))
+||
+(choice==="fold" && spot.best.includes("raise"))
+){
+passive++;
+}
+
+if(
+(choice.includes("raise") && spot.best==="fold")
+){
+aggressive++;
+}
+
+document.getElementById("feedback").innerHTML =
+"❌ Nicht optimal<br><br>" + spot.explanation;
+}
+
+document.getElementById("correct").innerText = correct;
+document.getElementById("passive").innerText = passive;
+document.getElementById("aggressive").innerText = aggressive;
+
+setTimeout(() => {
+
+current++;
+
+if(current >= spots.length){
+
+document.getElementById("question").innerHTML =
+"Training beendet.";
+
+return;
+}
+
+loadSpot();
+
+},3000);
+
+}
+
+loadSpot();
+
+</script>
+
+</body>
+</html>
